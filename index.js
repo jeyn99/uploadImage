@@ -14,7 +14,7 @@ var cors = require('cors');
 
 app.use(cors());
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '80KB'}));
 
 app.use(bodyParser.json({ type: 'application/*+json' }));
 
@@ -61,15 +61,24 @@ app.post('/create', upload.single('photo'), (req, res, next) => {
   })
 
   app.post('/all',(req, res) =>{
-      console.log('hello')
-      Shop.find({_id: '5dc3c1bf84543c1580c722e0'})
-      .then(result =>{
-          console.log(result[0].item.toString('base64'))
-          
-          res.send(result[0].item.toString('base64'))
-      }).catch(err =>{
-          console.log(err)
+      //console.log('hello')
+      let list = [];
+      Shop.find(function(err, data) {
+        data.forEach(pic => {
+            list.push(pic.item.toString('base64'))
+        });
+        res.send(list)
+        //console.log(data[0])
+        //console.log(data[0].item.toString('base64'))
       })
+    //   Shop.find({_id: '5dc3d804852ab204485fb74b'})
+    //   .then(result =>{
+    //       //console.log(result[0].item.toString('base64'))
+          
+    //       res.send(result[0].item.toString('base64'))
+    //   }).catch(err =>{
+    //       console.log(err)
+    //   })
   })
 
 
